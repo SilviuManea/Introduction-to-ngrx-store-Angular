@@ -26,3 +26,13 @@ $ ng serve
 
 # In VSCode Create empty directory 'store' under src/app folder
 
+----------------------------------------------------------2 - Adding the Shopping List
+
+# Under store create new folder called 'models' and inside a new file called 'shopping-item.model.ts'
+
+For this project, users are going to use a simple form to add items to a shopping list, therefore, we’ll need a model to represent this. Create the ShoppingItem model at: src/app/store/models/shopping-item.model.ts:
+
+export interface ShoppingItem {
+   id?: string;
+   name: string;
+}
