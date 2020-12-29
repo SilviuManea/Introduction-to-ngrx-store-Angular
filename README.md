@@ -106,4 +106,22 @@ export interface AppState {
 }
 This will allow us to type the structure of our Store and make it easier to select slices of state in the future. We'll be using this in a moment, until then, we need to register our shopping reducer as a root reducer.
 
+# 6 Adding imports to App.Module 
 
+
+Let’s update the /src/app/app.module.ts file with imports of @ngrx/store and the reducer we created earlier. We'll also be using ngModel later to capture user input, ensure you've imported FormsModule too.
+
+import { FormsModule } from '@angular/forms';
+import { StoreModule } from '@ngrx/store'; 
+
+import { ShoppingReducer } from './reducers/shopping.reducer';
+
+@NgModule({
+ imports: [
+   BrowserModule,
+   FormsModule,
+   StoreModule.forRoot({
+     shopping: ShoppingReducer
+   })
+ ],
+ 
