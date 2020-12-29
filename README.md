@@ -193,4 +193,53 @@ body {
   background-color: #576574;
 }
 
+# 8 Selecting State
+
+In order to display shopping items, we'll need to select the shopping slice of state from our store. @ngrx makes this easy with a select method which provides us with a reactive Observable:
+
+import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+
+import { ShoppingItem } from './store/models/shopping-item.model';
+import { AppState } from './store/models/app-state.model';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss']
+})
+export class AppComponent implements OnInit {
+  
+  shoppingItems: Observable<Array<ShoppingItem>>;
+
+  constructor(private store: Store<AppState>) { }
+
+  ngOnInit() {
+    this.shoppingItems = this.store.select(store => store.shopping);
+  }
+}
+Our shoppingItems observable matches the shopping reducer that we defined in our StoreModule.forRoot() earlier. We also created the AppState interface to match this and give us strong typing.
+
+As a note, we could have also selected our shopping slice by string, providing it matched the reducer definition:
+
+this.shoppingItems = this.store.select('shopping');
+We can then display this on screen with the following mark-up:
+
+<div id="wrapper">
+  
+  <div id="shopping-list">
+    <div id="list">
+      <h2>Shopping List</h2>
+
+      <ul>
+        <li *ngFor="let shopping of shoppingItems | async">
+          {{ shopping.name }}
+        </li>
+      </ul>
+    </div>
+  </div>
+  
+</div>
+The most important consideration here is the automatic subscription to our shoppingItems observable with the async pipe. Angular will then handle the subscription/unsubscription events for us automatically.
 

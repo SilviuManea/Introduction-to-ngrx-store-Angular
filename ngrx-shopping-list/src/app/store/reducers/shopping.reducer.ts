@@ -6,6 +6,10 @@ const initialState: Array<ShoppingItem> = [ //we represent one item inside of th
     {
       id: "1775935f-36fd-467e-a667-09f95b917f6d",
       name: 'Diet Coke',
+    },
+    {
+      id: "1775935f-36fd-467e-a667-09f95b917f6d",
+      name: 'Fanta',
     }
   ];
 

@@ -1,10 +1,22 @@
+import { OnInit } from '@angular/core';
 import { Component } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { AppState } from './store/models/app-state.model';
+import { ShoppingItem } from './store/models/shopping-item.model';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
-  title = 'ngrx-shopping-list';
+export class AppComponent implements OnInit{
+  shoppingItems$: Observable<Array<ShoppingItem>>; //we create the observable where we retreive the item
+  //the constructor tells ngrx how our store looks
+  constructor(private store:Store<AppState>){}//the constructor will be injecting our store with the appstate
+
+  ngOnInit():void{
+    this.shoppingItems$ = this.store.select(store => store.shopping); //carga nuestro observable con los valores de la store
+  }
+
 }
