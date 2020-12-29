@@ -106,7 +106,7 @@ export interface AppState {
 }
 This will allow us to type the structure of our Store and make it easier to select slices of state in the future. We'll be using this in a moment, until then, we need to register our shopping reducer as a root reducer.
 
-# 6 Adding imports to App.Module 
+# 6 - Adding imports to App.Module 
 
 
 Let’s update the /src/app/app.module.ts file with imports of @ngrx/store and the reducer we created earlier. We'll also be using ngModel later to capture user input, ensure you've imported FormsModule too.
@@ -125,7 +125,7 @@ import { ShoppingReducer } from './reducers/shopping.reducer';
    })
  ],
  
-# 7 Adding Reading, Writing, and Deleting Capabilities
+# 7 - Adding Reading, Writing, and Deleting Capabilities
 
 Here's the fun part. We can wire the store up to our UI and see our shopping list in action!
 
@@ -193,7 +193,7 @@ body {
   background-color: #576574;
 }
 
-# 8 Selecting State
+# 8 - Selecting State
 
 In order to display shopping items, we'll need to select the shopping slice of state from our store. @ngrx makes this easy with a select method which provides us with a reactive Observable:
 
@@ -242,4 +242,69 @@ We can then display this on screen with the following mark-up:
   
 </div>
 The most important consideration here is the automatic subscription to our shoppingItems observable with the async pipe. Angular will then handle the subscription/unsubscription events for us automatically.
+
+# 9 - Adding new items
+
+In order to add a new item to our store, we'll need to dispatch an AddItemAction with the payload of a new ShoppingItem. Let's take a look at how we can do that:
+
+import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { v4 as uuid } from 'uuid';
+
+import { AppState } from './store/models/app-state.model';
+import { ShoppingItem } from './store/models/shopping-item.model';
+import { AddItemAction } from './store/actions/shopping.actions';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss']
+})
+export class AppComponent implements OnInit {
+  
+  shoppingItems: Observable<Array<ShoppingItem>>;
+  newShoppingItem: ShoppingItem = { id: '', name: '' }
+
+  constructor(private store: Store<AppState>) { }
+
+  ngOnInit() {
+    this.shoppingItems = this.store.select(store => store.shopping);
+  }
+
+  addItem() {
+    this.newShoppingItem.id = uuid();
+
+    this.store.dispatch(new AddItemAction(this.newShoppingItem));
+
+    this.newShoppingItem = { id: '', name: '' };
+  }
+}
+We're able to generate a unique id with the uuid library. We don't have to install this into our project as it comes by default as a dependency to angular. At this point we'll also need to update our app.component.html to add our form:
+
+<div id="wrapper">
+  <div id="shopping-list">
+    <div id="list">
+      <h2>Shopping List</h2>
+
+      <ul>
+        <li *ngFor="let shopping of shoppingItems | async">
+          {{ shopping.name }}
+          <br><br>
+        </li>
+      </ul>
+    </div>
+
+    <form (ngSubmit)="addItem()">
+      <input type="text" [(ngModel)]="newShoppingItem.name" placeholder="Item" name="itemName"/>
+      <button type="submit" >+</button>
+    </form>
+  </div>
+</div>
+Here's what happens once we hit the + button:
+
+1.The AddItemAction is fired with the payload of newShoppingItem.
+2.Our shoppingReducer sees the new action and filters by action.type.
+3.As the action.type is [SHOPPING] Add Item the newShoppingItem is added to the end of our array: [...state, action.payload],
+4.The shopping slice of state is updated and as we're subscribed to changes with the async pipe our UI updates.
 
