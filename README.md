@@ -378,3 +378,30 @@ export class AppComponent implements OnInit {
 }
 Here's our completely empty shopping list with no items now that we've deleted everything.
 
+# 11 Adding @ngrx/store-devtools
+
+Adding @ngrx/store-devtools
+Wouldn't it be awesome if we could visualise our state changes without needing to build out a fancy UI? As well as this, what if something goes wrong?
+
+We can take advantage of the Redux Extension for Chrome/Firefox/X and see each action.type, payload and much more every time its fired like this:
+
+The best part? It's one command away from being in your project! Using the Angular CLI we can add it straight-up with one command:
+
+$ ng add @ngrx/store-devtools
+This does the following:
+
+Installing packages for tooling via npm.
++ @ngrx/store-devtools@7.4.0
+added 1 package
+
+Installed packages for tooling via npm.
+UPDATE src/app/app.module.ts (977 bytes)
+UPDATE package.json (1381 bytes)
+As well as installing @ngrx/store-devtools, it also adds the StoreDevtoolsModule into our app.module.ts imports:
+
+imports: [
+  StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production })
+],
+Now any time we perform an action (such as Add or Delete) we can see the a significant amount of surrounding data:
+
+
