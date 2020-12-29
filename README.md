@@ -125,3 +125,72 @@ import { ShoppingReducer } from './reducers/shopping.reducer';
    })
  ],
  
+# 7 Adding Reading, Writing, and Deleting Capabilities
+
+Here's the fun part. We can wire the store up to our UI and see our shopping list in action!
+
+I've elected to add some slight CSS to our list that you may want to add inside of app.component.scss:
+
+#wrapper {
+  text-align: center;
+  color: white;
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0px;
+  width: 400px;
+  margin: 0 auto;
+}
+
+#shopping-list {
+  box-shadow: 20px 20px 0px #222f3e;
+}
+
+form {
+  display: flex;
+  flex-direction: row;
+}
+
+form > input {
+  flex-grow: 1;
+  outline: none;
+  padding-left: 4px;
+  border: 0px;
+  height: 20px;
+}
+
+form > button {
+  border: 0px;
+  background: #10ac84;
+  color: white;
+  outline: none;
+
+  &:hover {
+    background: #006266;
+  }
+}
+
+ul {
+  list-style: none;
+  background: #1dd1a1;
+  padding: 10px 0px;
+  margin: 0px;
+}
+
+li {
+  padding-bottom: 4px;
+}
+
+h2 {
+  background: #10ac84;
+  padding: 10px 0px;
+  margin: 0px;
+}
+I've also changed the background color of the body inside of styles.scss:
+
+body {
+  background-color: #576574;
+}
+
+
