@@ -95,4 +95,15 @@ For example, whenever we call the ADD_ITEM action, the reducer takes the previou
 
 This then gives us a new version of state that matches the previous structure or in the case of no action.type being found inside of our shoppingReducer, it simply returns the state.
 
+# 5 App-state
+
+Next, we can create an interface for our AppState inside of src/store/models/app-state.model.ts.
+
+import { ShoppingItem } from './shopping-item.model';
+
+export interface AppState {
+  readonly shopping: Array<ShoppingItem>
+}
+This will allow us to type the structure of our Store and make it easier to select slices of state in the future. We'll be using this in a moment, until then, we need to register our shopping reducer as a root reducer.
+
 
