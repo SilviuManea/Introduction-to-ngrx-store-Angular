@@ -95,7 +95,7 @@ For example, whenever we call the ADD_ITEM action, the reducer takes the previou
 
 This then gives us a new version of state that matches the previous structure or in the case of no action.type being found inside of our shoppingReducer, it simply returns the state.
 
-# 5 App-state
+# 5 - App-state
 
 Next, we can create an interface for our AppState inside of src/store/models/app-state.model.ts.
 
