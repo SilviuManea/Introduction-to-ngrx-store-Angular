@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { v4 as uuid } from 'uuid';
-import { AddItemAction, ShoppingActionTypes } from './store/actions/shopping.actions';
+import { AddItemAction, DeleteItemAction, ShoppingActionTypes } from './store/actions/shopping.actions';
 import { AppState } from './store/models/app-state.model';
 import { ShoppingItem } from './store/models/shopping-item.model';
 
@@ -23,7 +23,7 @@ export class AppComponent implements OnInit{
   ngOnInit():void{
     this.shoppingItems$ = this.store.select(store => store.shopping); //carga nuestro observable con los valores de la store
 
-    setTimeout(() => this.addItem(),2000);
+    //setTimeout(() => this.addItem(),2000); //-Just for test 
   }
 
   //add a new shopping item
@@ -31,6 +31,11 @@ export class AppComponent implements OnInit{
     this.newShoppingItem.id = uuid();//set the id for the new item
     this.store.dispatch(new AddItemAction(this.newShoppingItem)); // add the item
     this.newShoppingItem = { id: '' , name: ''};//once added we clear the object for the next item
+  }
+
+  //remove shopping item
+  deleteItem(id: string){
+    this.store.dispatch(new DeleteItemAction(id));
   }
 
 }

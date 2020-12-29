@@ -308,3 +308,73 @@ Here's what happens once we hit the + button:
 3.As the action.type is [SHOPPING] Add Item the newShoppingItem is added to the end of our array: [...state, action.payload],
 4.The shopping slice of state is updated and as we're subscribed to changes with the async pipe our UI updates.
 
+# 10 - Deleting items
+
+If you've come this far, great job! Here's a challenge for you:
+
+Add the ability to delete a selected item by id
+
+When we start thinking about how we can add another feature to our project using the @ngrx pattern, things start to become systematic. We need the following:
+
+An action
+A reducer case and statement
+To start with, update the shopping.actions.ts with a new DELETE action:
+
+import { Action } from '@ngrx/store';
+import { ShoppingItem } from '../models/shopping-item.model';
+
+export enum ShoppingActionTypes {
+  ADD_ITEM = '[SHOPPING] Add Item',
+  DELETE_ITEM = '[SHOPPING] Delete Item'
+}
+
+export class AddItemAction implements Action {
+  readonly type = ShoppingActionTypes.ADD_ITEM
+
+  constructor(public payload: ShoppingItem) { }
+}
+
+export class DeleteItemAction implements Action {
+  readonly type = ShoppingActionTypes.DELETE_ITEM
+
+  constructor(public payload: string) { }
+}
+
+export type ShoppingAction = AddItemAction | DeleteItemAction
+We've added an item to the ShoppingActionTypes and a new DeleteItemAction. As well as that, we've updated the ShoppingAction type to be either an AddItemAction or DeleteItemAction.
+
+Next up, we need to add a reducer case which uses filter to return a new array that doesn't contain the selected shopping item.
+
+It's important that you don't mutate the state itself and always return a new array. For example, never use Array.splice to mutate the state itself.
+
+export function ShoppingReducer(state: Array<ShoppingItem> = initialState, action: ShoppingAction) {
+  switch (action.type) {
+    case ShoppingActionTypes.ADD_ITEM:
+      return [...state, action.payload];
+    case ShoppingActionTypes.DELETE_ITEM:
+      return state.filter(item => item.id !== action.payload);
+    default:
+      return state;
+  }
+}
+Now we'll need to update our app.component.ts and app.component.html to include the ability to dispatch a DeleteItemAction based on a selected id.
+
+Starting with the HTML file, update your li to include a click event that calls a deleteItem function:
+
+<li *ngFor="let shopping of shoppingItems | async" (click)="deleteItem(shopping.id)">
+  {{ shopping.name }}
+</li>
+Finally, update app.component.ts with the deleteItem function which uses the specified id:
+
+    import { AddItemAction, DeleteItemAction } from './store/actions/shopping.actions';
+
+export class AppComponent implements OnInit {
+
+  // Omitted
+
+  deleteItem(id: string) {
+    this.store.dispatch(new DeleteItemAction(id));
+  }
+}
+Here's our completely empty shopping list with no items now that we've deleted everything.
+

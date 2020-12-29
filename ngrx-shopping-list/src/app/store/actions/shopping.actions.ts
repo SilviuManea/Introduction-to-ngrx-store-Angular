@@ -5,6 +5,7 @@ export enum ShoppingActionTypes {
     ADD_ITEM = '[SHOPPING] Add Item',
     //ADD_ITEM_SUCCESS = '[SHOPPING] Add Item Success',
     //ADD_ITEM_FAILURE = '[SHOPPING] Add Item Failure',
+    DELETE_ITEM = '[SHOPPING] Delete Item'
 }
 
 export class AddItemAction implements Action {
@@ -14,4 +15,13 @@ export class AddItemAction implements Action {
 
 }
 
-export type ShoppingAction = AddItemAction;
+export class DeleteItemAction implements Action {
+    readonly type = ShoppingActionTypes.DELETE_ITEM;
+
+    constructor(public payload:string){} //this payload will be the id(of type string) of the object
+
+
+
+}
+
+export type ShoppingAction = AddItemAction | DeleteItemAction; //add or delete action
