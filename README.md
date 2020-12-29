@@ -63,4 +63,36 @@ export class AddItemAction implements Action {
 export type ShoppingAction = AddItemAction
 We're creating an enum which contains the ADD_ITEM Action type. This can then be used inside of the AddItemAction class which contains a payload (i.e. a new ShoppingItem).
 
+# 4 - Adding a Reducer
+
+Reducers are the second essential aspect of an @ngrx/store application. They play the critical role of managing the transitions taking place from one state to the next.
+
+As pure functions, reducers generate the same output for a given input. Reducers accept two arguments, which are the previous state as well as the latest dispatched Action, and either returns a newly changed state or the unchanged state.
+
+To add a reducer to our project, let’s create this folder and file: /src/app/store/reducers/shopping.reducer.ts.
+
+import { ShoppingActionTypes, ShoppingAction } from '../actions/shopping.actions';
+import { ShoppingItem } from '../models/shopping-item.model';
+
+const initialState: Array<ShoppingItem> = [
+  {
+    id: "1775935f-36fd-467e-a667-09f95b917f6d",
+    name: 'Diet Coke',
+  }
+];
+
+export function ShoppingReducer(state: Array<ShoppingItem> = initialState, action: ShoppingAction) {
+  switch (action.type) {
+    case ShoppingActionTypes.ADD_ITEM:
+      return [...state, action.payload];
+    default:
+      return state;
+  }
+}
+The reducer takes in the initial state which contains our Diet Coke and a dispatched action. It then checks which action.type has been fired and subsequently reduces this to a value that represents the same structure as before but with different data.
+
+For example, whenever we call the ADD_ITEM action, the reducer takes the previous state and appends the action.payload (i.e. the new Shopping item) to the end of the list.
+
+This then gives us a new version of state that matches the previous structure or in the case of no action.type being found inside of our shoppingReducer, it simply returns the state.
+
 
